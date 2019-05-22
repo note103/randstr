@@ -71,7 +71,7 @@ elsif ($opt eq 'lw') {
 
 my @result;
 my $count = 0;
-while ($count <= $num) {
+while ($count < $num) {
     push @result, $chop[$count];
     $count++;
 }
