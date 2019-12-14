@@ -97,7 +97,7 @@ print @result;
 __END__
 =head1 SYNOPSIS
 
-find-file [options] [FILE]
+perl randstr.pl [options] [num]
 
 Options:
 
