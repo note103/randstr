@@ -5,17 +5,33 @@ use feature 'say';
 
 use Time::Piece;
 use Digest::SHA;
+use Getopt::Long qw(:config posix_default no_ignore_case gnu_compat);
+use Pod::Usage;
 
+my $opts = {};
+
+GetOptions(
+    $opts => qw(
+        digit|d
+        word|w
+        mix|m
+        lower|l
+        upper|u
+        help|h
+    ),
+);
+pod2usage if ($opts->{help});
+
+my $d = $opts->{digit};
+my $w = $opts->{word};
+my $m = $opts->{mix};
+my $l = $opts->{lower};
+my $u = $opts->{upper};
 
 my $opt = $ARGV[0] // '';
 my $num = $ARGV[1] // 100;
 
-if ($opt =~ /\A(d|w|dw|wd|lw|uw)\z/) {
-    $opt = $1;
-}
-elsif ($opt =~ /\A(\d+)\z/) {
-    $num = $1;
-}
+$num = $d if $d;
 
 if ($num > 1000) {
     $num = 1000;
@@ -40,15 +56,15 @@ while ($i <= $round) {
 my $sha1s = join "", @sha1s;
 my @chop = split //, $sha1s;
 
-if ($opt eq 'w') {
+if ($w) {
     my @words =  grep {/[a-zA-Z]/} @chop;
     @chop = @words;
 }
-elsif ($opt =~ /(dw|wd)/) {
+elsif ($m) {
     my @words =  grep {/[a-zA-Z\d]/} @chop;
     @chop = @words;
 }
-elsif ($opt eq 'd') {
+elsif ($d) {
     my @digit =  grep {/\d/} @chop;
     while ($#digit < $num) {
         my @tigid = reverse @digit;
@@ -56,13 +72,13 @@ elsif ($opt eq 'd') {
     }
     @chop = @digit;
 }
-elsif ($opt eq 'uw') {
+elsif ($u) {
     my $uc = uc $sha1s;
     my @chop_uc = split //, $uc;
     my @words_uc =  grep {/[a-zA-Z]/} @chop_uc;
     @chop = @words_uc;
 }
-elsif ($opt eq 'lw') {
+elsif ($l) {
     my $lc = lc $sha1s;
     my @chop_lc = split //, $lc;
     my @words_lc =  grep {/[a-zA-Z]/} @chop_lc;
@@ -76,3 +92,18 @@ while ($count < $num) {
     $count++;
 }
 print @result;
+
+
+__END__
+=head1 SYNOPSIS
+
+find-file [options] [FILE]
+
+Options:
+
+  -d --digit           Set digit
+  -w --word            Set words
+  -m --mix             Set digit & words
+  -l --lower           Set lower case
+  -u --upper           Set upper case
+  -h --help            Show help
