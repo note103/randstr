@@ -90,6 +90,7 @@ while ($count < $num) {
     $count++;
 }
 print @result;
+print "\n";
 
 
 __END__
