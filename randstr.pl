@@ -54,15 +54,7 @@ while ($i <= $round) {
 my $sha1s = join "", @sha1s;
 my @chop = split //, $sha1s;
 
-if ($w) {
-    my @words =  grep {/[a-zA-Z]/} @chop;
-    @chop = @words;
-}
-elsif ($m) {
-    my @words =  grep {/[a-zA-Z\d]/} @chop;
-    @chop = @words;
-}
-elsif ($d) {
+if ($d) {
     my @digit =  grep {/\d/} @chop;
     while ($#digit < $num) {
         my @tigid = reverse @digit;
@@ -70,17 +62,25 @@ elsif ($d) {
     }
     @chop = @digit;
 }
-elsif ($u) {
-    my $uc = uc $sha1s;
-    my @chop_uc = split //, $uc;
-    my @words_uc =  grep {/[a-zA-Z]/} @chop_uc;
-    @chop = @words_uc;
+elsif ($w) {
+    my @words =  grep {/[a-zA-Z]/} @chop;
+    @chop = @words;
+}
+elsif ($m) {
+    my @words =  grep {/[a-zA-Z\d]/} @chop;
+    @chop = @words;
 }
 elsif ($l) {
     my $lc = lc $sha1s;
     my @chop_lc = split //, $lc;
     my @words_lc =  grep {/[a-zA-Z]/} @chop_lc;
     @chop = @words_lc;
+}
+elsif ($u) {
+    my $uc = uc $sha1s;
+    my @chop_uc = split //, $uc;
+    my @words_uc =  grep {/[a-zA-Z]/} @chop_uc;
+    @chop = @words_uc;
 }
 
 my @result;
@@ -95,7 +95,7 @@ print @result;
 __END__
 =head1 SYNOPSIS
 
-perl randstr.pl [options] [num]
+perl randstr.pl [option] [num]
 
 Synopsys:
 
@@ -106,7 +106,7 @@ Synopsys:
   perl randstr.pl -l 5 #=> jajnu
   perl randstr.pl -u 5 #=> OKKQX
   perl randstr.pl      #=> 5Gwl1PJsNCL0lrqdHty5wGhy66kz61ixwm11qFZchU3LyweQlVc9GEmdY/lLD2QytB8qWifJDo520tGg0Aktu8HiFlwnF+VJV97w
-                       # If no options, output 100 chars.
+                       # Unless num, output 100 chars.
 
 Options:
 
